@@ -15,31 +15,32 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // Do any additional setup after loading the view, typically from a nib.
     }
 
-    @IBAction func OpenCameraToTakePhoto(_ sender: Any) {
-        // UIImagePickerController is a view controller that lets a user pick media from their photo library.
+
+    @IBAction func chooseImage(_ sender: Any) {
+         //UIImagePickerController is a view controller that lets a user pick media from their photo library.
         let imageTakingController = UIImagePickerController()
-        
+
         //check if the device has a camera or not
         if !UIImagePickerController.isSourceTypeAvailable(.camera){
-            
+
             let alertController = UIAlertController.init(title: nil, message: "Device has no camera.", preferredStyle: .alert)
-            
+
             let okAction = UIAlertAction.init(title: "Alright", style: .default, handler: {(alert: UIAlertAction!) in
             })
-            
+
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)
-            
+
             imageTakingController.sourceType = .photoLibrary
-            
-            
+
+
         }
         else{
             imageTakingController.sourceType = .camera
-            
+
             imageTakingController.delegate = self
             present(imageTakingController, animated: true, completion: nil)
-            
+
             print("SH:: Test")
         }
     }
