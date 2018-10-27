@@ -12,14 +12,43 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var inputDatePickerDueDate: UITextField!
     
+    let datePicker = UIDatePicker()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+
+        //To support to close the editor if tapped on the application blanksapce
+        let tagGesture = UITapGestureRecognizer(target: self, action: #selector(ViewController.viewTapped(gestureRecognized:)))
+        view.addGestureRecognizer(tagGesture)
+        
+        //set datepicker
+        datePicker.datePickerMode = .dateAndTime
+        
+        //Create a toolbar for dateicker
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: #selector(doneDateChanged))
+        toolbar.setItems([doneButton], animated: true)
+        
+        inputDatePickerDueDate.inputView = datePicker
+        inputDatePickerDueDate.inputAccessoryView = toolbar
     }
-
-
+    
+    @objc func viewTapped(gestureRecognized: UITapGestureRecognizer){
+        view.endEditing(true)
+    }
+    
+    @objc func doneDateChanged(){
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd,yyyy hh:mm aa"
+        inputDatePickerDueDate.text = dateFormatter.string(from: datePicker.date)
+        view.endEditing(true)
+    }
+    
     @IBAction func chooseImage(_ sender: Any) {
         //UIImagePickerController is a view controller that lets a user pick media from their photo library.
         let imageTakingController = UIImagePickerController()

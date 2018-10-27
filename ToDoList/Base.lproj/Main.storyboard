@@ -52,7 +52,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Nri-J8-za0">
-                                <rect key="frame" x="20" y="40" width="335" height="415"/>
+                                <rect key="frame" x="20" y="40" width="335" height="455"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="New task to do" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Isp-mN-3hN">
                                         <rect key="frame" x="0.0" y="0.0" width="335" height="30"/>
@@ -60,14 +60,20 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Due date and time" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6Kn-tG-udp">
+                                        <rect key="frame" x="0.0" y="40" width="335" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zbk-R4-Plc">
-                                        <rect key="frame" x="0.0" y="40" width="335" height="335"/>
+                                        <rect key="frame" x="0.0" y="80" width="335" height="335"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="zbk-R4-Plc" secondAttribute="height" multiplier="1:1" id="a3X-OO-Txc"/>
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yWU-DC-mwT">
-                                        <rect key="frame" x="0.0" y="385" width="335" height="30"/>
+                                        <rect key="frame" x="0.0" y="425" width="335" height="30"/>
                                         <state key="normal" title="Choose Image"/>
                                         <connections>
                                             <action selector="chooseImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QA8-aO-DvY"/>
@@ -77,6 +83,8 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Isp-mN-3hN" secondAttribute="trailing" id="SHR-zJ-ayO"/>
                                     <constraint firstAttribute="trailing" secondItem="yWU-DC-mwT" secondAttribute="trailing" id="ShB-DY-b13"/>
+                                    <constraint firstItem="6Kn-tG-udp" firstAttribute="leading" secondItem="Nri-J8-za0" secondAttribute="leading" id="eJQ-w2-6VF"/>
+                                    <constraint firstAttribute="trailing" secondItem="6Kn-tG-udp" secondAttribute="trailing" id="sBJ-UX-uOa"/>
                                 </constraints>
                             </stackView>
                         </subviews>
@@ -90,6 +98,7 @@
                     </view>
                     <connections>
                         <outlet property="imageView" destination="zbk-R4-Plc" id="c8y-am-Lbt"/>
+                        <outlet property="inputDatePickerDueDate" destination="6Kn-tG-udp" id="boc-v7-OCP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
