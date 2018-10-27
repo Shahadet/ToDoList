@@ -43,5 +43,7 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Will allow you to take photo for your to do list</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Will allow you to add photo for your to do list</string>
 </dict>
 </plist>
