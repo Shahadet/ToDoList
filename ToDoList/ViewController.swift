@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
 
     
+    @IBOutlet weak var titleToDo: UITextField!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var inputDatePickerDueDate: UITextField!
     

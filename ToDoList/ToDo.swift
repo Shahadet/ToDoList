@@ -8,15 +8,17 @@
 
 import UIKit
 
+//Model Class to store tasks to do
+
 class ToDo {
     
     //MARK: Initialization
     
-    init(title: String, photo: UIImage?, notes: String, rating: Int) {
+    init? (title: String, photo: UIImage?, notes: String) {
         self.title = title
         self.photo = photo
         self.notes = notes
-        self.rating = rating
+        //self.rating = rating
     }
     
     //MARK: Properties
@@ -24,6 +26,6 @@ class ToDo {
     var title: String
     var photo: UIImage?
     var notes: String
-    var rating: Int
+    //var rating: Int
     
 }
