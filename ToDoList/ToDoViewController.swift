@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ToDoViewController.swift
 //  ToDoList
 //
 //  Created by Md. Shahadet Hossain on 2018-10-19.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+class ToDoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
 
     
     @IBOutlet weak var titleToDo: UITextField!
@@ -17,12 +17,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     let datePicker = UIDatePicker()
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
 
         //To support to close the editor if tapped on the application blanksapce
-        let tagGesture = UITapGestureRecognizer(target: self, action: #selector(ViewController.viewTapped(gestureRecognized:)))
+        let tagGesture = UITapGestureRecognizer(target: self, action: #selector(ToDoViewController.viewTapped(gestureRecognized:)))
         view.addGestureRecognizer(tagGesture)
         
         //set datepicker
