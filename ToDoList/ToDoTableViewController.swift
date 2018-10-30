@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os.log
 
 //controller class to control Table View
 
@@ -25,7 +26,8 @@ class ToDoTableViewController: UITableViewController {
         
     }
 
-    // MARK: - Table view data source
+   
+    // MARK: Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -88,15 +90,61 @@ class ToDoTableViewController: UITableViewController {
     }
     */
 
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        super.prepare(for: segue, sender: sender)
+        
+        switch(segue.identifier ?? "") {
+            
+        case "AddItem":
+            os_log("Adding a new meal.", log: OSLog.default, type: .debug)
+            
+        case "ShowDetail":
+            guard let toDoDetailViewController = segue.destination as? ToDoViewController else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            
+            guard let selectedToDOCell = sender as? ToDoTableViewCell else {
+                fatalError("Unexpected sender: \(sender ?? "unknown")")
+            }
+            
+            guard let indexPath = tableView.indexPath(for: selectedToDOCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            
+            let selectedToDo = toDoList.toDos[indexPath.row]
+            toDoDetailViewController.toDo = selectedToDo
+            
+        default:
+            fatalError("Unexpected Segue Identifier; \(segue.identifier ?? "unknown")")
+        }
     }
-    */
+
+    //MARK: Action
+    @IBAction func unwindToToDoList(sender: UIStoryboardSegue) {
+        if let sourceViewController = sender.source as? ToDoViewController, let toDo = sourceViewController.toDo {
+            
+            //check if a user tapped one of the table views cells to edit a meal.
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                // Update an existing meal.
+                toDoList.toDos[selectedIndexPath.row] = toDo
+                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+            }
+            else {
+                // Add a new meal.
+                let newIndexPath = IndexPath(row: toDoList.toDos.count, section: 0)
+                
+                toDoList.toDos.append(toDo)
+                tableView.insertRows(at: [newIndexPath], with: .automatic)
+            }
+            
+            // Save the toDos.
+            saveToDos()
+        }
+    }
     
     
     //MARK: Private Methods
@@ -119,5 +167,14 @@ class ToDoTableViewController: UITableViewController {
         }
         
         toDoList.toDos += [todo1, todo2, todo3]
+    }
+    
+    private func saveToDos() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(toDoList.toDos, toFile: ToDo.ArchiveURL.path)
+        if isSuccessfulSave {
+            os_log("ToDos successfully saved.", log: OSLog.default, type: .debug)
+        } else {
+            os_log("Failed to save ToDos...", log: OSLog.default, type: .error)
+        }
     }
 }

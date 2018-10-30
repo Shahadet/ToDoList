@@ -7,22 +7,38 @@
 //
 
 import UIKit
+import os.log
 
-class ToDoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+class ToDoViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
 
     
     @IBOutlet weak var titleToDo: UITextField!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var inputDatePickerDueDate: UITextField!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var priorityControl: UISegmentedControl!
     
     let datePicker = UIDatePicker()
-    
+    /*     This value is either passed by `ToDOTableViewController` in `prepare(for:sender:)` or constructed as part of adding a new meal.    */
+    var toDo: ToDo?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        // Handle the text field’s user input through delegate callbacks.
+        titleToDo.delegate = self
+        
+        // Set up views if editing an existing Meal.
+        if let toDo = toDo {
+            navigationItem.title = toDo.title
+            titleToDo.text   = toDo.title
+            imageView.image = toDo.photo
+            inputDatePickerDueDate.text = toDo.notes
+        }
 
+        //************* Date Picker ************
         //To support to close the editor if tapped on the application blanksapce
         let tagGesture = UITapGestureRecognizer(target: self, action: #selector(ToDoViewController.viewTapped(gestureRecognized:)))
         view.addGestureRecognizer(tagGesture)
@@ -39,7 +55,49 @@ class ToDoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         inputDatePickerDueDate.inputView = datePicker
         inputDatePickerDueDate.inputAccessoryView = toolbar
+        
+        // Enable the Save button only if the text field has a valid ToDo name.
+        updateSaveButtonState()
     }
+    
+    //MARK: Navigation
+    
+    @IBAction func cancel(_ sender: UIBarButtonItem) {
+        // Depending on style of presentation (modal or push presentation), this view controller needs to be dismissed in two different ways.
+        let isPresentingInAddMealMode = presentingViewController is UINavigationController
+        
+        if isPresentingInAddMealMode {
+            dismiss(animated: true, completion: nil)
+        }
+        else if let owningNavigationController = navigationController{
+            owningNavigationController.popViewController(animated: true)
+        }
+        else {
+            fatalError("The MealViewController is not inside a navigation controller.")
+        }
+    }
+    
+    // This method lets you configure a view controller before it's presented.
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        // Configure the destination view controller only when the save button is pressed.
+        guard let button = sender as? UIBarButtonItem, button === saveButton else {
+            os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
+            return
+        }
+        let title = titleToDo.text ?? ""
+        let photo = imageView.image
+        let inputDate = inputDatePickerDueDate.text ?? ""
+        
+        // Set the toDo to be passed to ToDOTableViewController after the unwind segue.
+
+        toDo = ToDo(title: title, photo: photo, notes: "Will Take later \(inputDate)", createdDate:"",dueDate:"",priority:"")
+        
+    }
+    
+    
+    
+    //MARK: Action
     
     @objc func viewTapped(gestureRecognized: UITapGestureRecognizer){
         view.endEditing(true)
@@ -93,6 +151,32 @@ class ToDoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
+    }
+    
+    //MARK: UITextFieldDelegate
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // Hide the keyboard.
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        // Disable the Save button while editing.
+        saveButton.isEnabled = false
+    }
+    //this method is called after the text field resigns its first-responder status, in the above method
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        updateSaveButtonState()
+        navigationItem.title = textField.text
+    }
+    
+    //MARK: Private Methods
+    
+    private func updateSaveButtonState() {
+        // Disable the Save button if the text field is empty.
+        let text = titleToDo.text ?? ""
+        
+        saveButton.isEnabled = !text.isEmpty
     }
 }
 

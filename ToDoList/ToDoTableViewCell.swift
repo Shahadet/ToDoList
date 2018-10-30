@@ -15,7 +15,11 @@ class ToDoTableViewCell: UITableViewCell {
     //MARK: Properties
     
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var note: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var createdDate: UILabel!
+    @IBOutlet weak var dueDate: UILabel!
+    @IBOutlet weak var priorityimage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
