@@ -21,8 +21,22 @@ class ToDoViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     let datePicker = UIDatePicker()
     /*     This value is either passed by `ToDOTableViewController` in `prepare(for:sender:)` or constructed as part of adding a new meal.    */
     var toDo: ToDo?
+    var lastSavedPriority: String
     
-    
+    @IBAction func setPriority(_ sender: Any) {
+        
+        switch priorityControl.selectedSegmentIndex
+        {
+        case 0:
+            lastSavedPriority = "High";
+        case 1:
+            lastSavedPriority = "Low";
+        case 2:
+            lastSavedPriority = "Medium";
+        default:
+            break
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -89,9 +103,21 @@ class ToDoViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         let photo = imageView.image
         let inputDate = inputDatePickerDueDate.text ?? ""
         
+        //if priority == ToDo.Priority.high {
+            //cell.priorityImage.backgroundColor = UIColor.red
+        //} else if priority == ToDo.Priority.medium {
+            //cell.priorityImage.backgroundColor = UIColor.gray
+        //} else {
+            //cell.priorityImage.backgroundColor = UIColor.green
+        //}
+        
         // Set the toDo to be passed to ToDOTableViewController after the unwind segue.
 
-        toDo = ToDo(title: title, photo: photo, notes: "Will Take later \(inputDate)", createdDate:"",dueDate:"",priority:"")
+        var priority:ToDo.Priority
+//        if lastSavedPriority == ToDo.Priority.high{
+//            priority = 
+//        }
+        toDo = ToDo(title: title, photo: photo, notes: "Will Take later \(inputDate)", createdDate:"",dueDate:"",priority:priority)
         
     }
     
